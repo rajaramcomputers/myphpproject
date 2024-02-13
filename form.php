@@ -65,27 +65,69 @@
 }
 ?>
 <form action="" method="post">
-<input type= "text" name="name"><br>
+User name: <input type= "text" name="name" value="<?php echo htmlspecialchars($name, ENT_QUOTES);?>"><br>
 <input type= "password" name="password"><br>
 Gender:
-<input type="radio" name="gender" value="f">female
-<input type="radio" name="gender" value="m">male
-<input type="radio" name="other" value="o">other <br>
+<input type="radio" name="gender" value="f"<?php 
+if ($gender === 'f'){
+    echo ' checked';
+}
+?>>female
+<input type="radio" name="gender" value="m"<?php 
+if ($gender === 'm'){
+    echo ' checked';
+}
+?>>male
+<input type="radio" name="gender" value="o"<?php 
+if ($gender === 'o'){
+    echo ' checked';
+}
+?>>other <br>
 Favorite Color:
 <select name="color">
     <option value="">Please select</option>
-    <option value="#f00">red</option>
-    <option value="#0f0">green</option>
-    <option value="#00f">blue</option>
+    <option value="#f00"<?php 
+    if ($color === '#f00'){
+        echo ' selected';
+    }?>>red</option>
+    <option value="#0f0"<?php 
+    if ($color === '#0f0'){
+        echo ' selected';
+    }
+    ?>>green</option>
+    <option value="#00f"<?php 
+    if ($color === '#00f'){
+        echo ' selected';
+    }
+    ?>>blue</option>
 </select><br>
 Languages Spoken:
 <select name="languages[]" multiple size="3">
-    <option value="en">English</option>
-    <option value="ta">Tamil</option>
-    <option value="hi">Hindi</option>
+    <option value="en"<?php 
+    if (in_array("en", $languages)){
+        echo ' selected';
+    }
+    ?>>English</option>
+    <option value="ta"<?php 
+    if (in_array("ta", $languages)){
+        echo ' selected';
+    }
+    ?>>Tamil</option>
+    <option value="hi"<?php 
+    if (in_array("hi", $languages)){
+        echo ' selected';
+    }
+    ?>>Hindi</option>
 </select><br>
-Comments: <textarea rows="3" cols="10" name="comments"></textarea><br>
-<input type="checkbox" name="tc" value="ok">I accept the T&amp;C<br>
+Comments: <textarea rows="3" cols="10" name="comments">
+<?php echo htmlspecialchars($comments, ENT_QUOTES);?>
+</textarea><br>
+<input type="checkbox" name="tc" value="ok"<?php 
+if($tc === 'ok'){
+    echo ' checked';
+}
+?>
+>I accept the T&amp;C<br>
 <input type="submit" name="submit" value = "register">
 
 </form>
