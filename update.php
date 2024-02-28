@@ -8,47 +8,47 @@
     }
 
     $name = "";
-    $password = "";
     $gender = "";
     $color = "";
      
 
     if (isset($_POST['submit'])){
+        $ok = true;
         if(!isset($_POST['name']) || $_POST['name'] === ''){
             $ok = false;
         } else {
             $name = $_POST['name'];
         };
-        if(!isset($_POST['password']) || $_POST['password'] === ''){
-            $ok = false;
-        } else {
-            $password = $_POST['password'];
-        };
+        // if(!isset($_POST['password']) || $_POST['password'] === ''){
+        //     $ok = false;
+        // } else {
+        //     $password = $_POST['password'];
+        // };
         if(!isset($_POST['gender']) || $_POST['gender'] === ''){
             $ok = false;
         } else {
             $gender = $_POST['gender'];
         };
-        if(!isset($_POST['color']) || $_POST['color'] === '' || count($_POST['languages']) == 0){
+        if(!isset($_POST['color']) || $_POST['color'] === '' ){ //|| count($_POST['languages']) == 0){
             $ok = false;
         } else {
             $color = $_POST['color'];
         };
-        if(!isset($_POST['languages']) || !array($_POST['languages']) === ''){
-            $ok = false;
-        } else {
-            $languages = $_POST['languages'];
-        };
-        if(!isset($_POST['comments']) || $_POST['comments'] === ''){
-            $ok = false;
-        } else {
-            $comments = $_POST['comments'];
-        };
-        if(!isset($_POST['tc']) || $_POST['tc'] === ''){
-            $ok = false;
-        } else {
-            $tc = $_POST['tc'];
-        };
+        // if(!isset($_POST['languages']) || !array($_POST['languages']) === ''){
+        //     $ok = false;
+        // } else {
+        //     $languages = $_POST['languages'];
+        // };
+        // if(!isset($_POST['comments']) || $_POST['comments'] === ''){
+        //     $ok = false;
+        // } else {
+        //     $comments = $_POST['comments'];
+        // };
+        // if(!isset($_POST['tc']) || $_POST['tc'] === ''){
+        //     $ok = false;
+        // } else {
+        //     $tc = $_POST['tc'];
+        // };
         if ($ok){
         // add the database code here
         $db = new mysqli(
@@ -58,20 +58,15 @@
             'php');
 
         $sql = sprintf(
-            "UPDATE users set name='%s', gender='%s', color='%s') VALUES (
-            '%s', '%s', '%s' WHERE id=%s",
+            "UPDATE users set name='%s', gender='%s', color='%s'
+            WHERE id=%s",
             $db->real_escape_string($name),
             $db->real_escape_string($gender),
             $db->real_escape_string($color),
             $id);
-            
-
         $db->query($sql);
-        echo '<p>User Added</p>';
+        echo '<p>User Updated</p>';
         $db->close();
-
-
-   
       /*  printf('User name: %s
         <br>Password: %s
         <br>Gender: %s
@@ -87,11 +82,26 @@
         htmlspecialchars($comments, ENT_QUOTES),
         htmlspecialchars($tc, ENT_QUOTES));*/
     }
-}
+} else {
+    $db = new mysqli(
+        'localhost',
+        'root',
+        '',
+        'php');
+        $sql = "select * from users WHERE id=$id";
+        $result = $db->query($sql);
+        
+        foreach ($result as $row){
+            $name = $row['name'];
+            $gender = $row['gender'];
+            $color = $row['color'];
+        }
+        $db->close();
+        }
 ?>
 <form action="" method="post">
 User name: <input type= "text" name="name" value="<?php echo htmlspecialchars($name, ENT_QUOTES);?>"><br>
-<input type= "password" name="password"><br>
+<!-- <input type= "password" name="password"><br> -->
 Gender:
 <input type="radio" name="gender" value="f"<?php 
 if ($gender === 'f'){
@@ -126,7 +136,7 @@ Favorite Color:
     }
     ?>>blue</option>
 </select><br>
-Languages Spoken:
+<!-- Languages Spoken:
 <select name="languages[]" multiple size="3">
     <option value="en"<?php 
     if (in_array("en", $languages)){
@@ -152,7 +162,7 @@ if($tc === 'ok'){
     echo ' checked';
 }
 ?>
->I accept the T&amp;C<br>
+>I accept the T&amp;C<br> -->
 <input type="submit" name="submit" value = "register">
 
 </form>
