@@ -47,6 +47,7 @@
         };
         if ($ok){
         // add the database code here
+        $hash = password_hash($password, PASSWORD_DEFAULT);
         $db = new mysqli(
             'localhost',
             'root',
@@ -54,11 +55,12 @@
             'php');
 
         $sql = sprintf(
-            "INSERT INTO users(name, gender, color) VALUES (
-            '%s', '%s', '%s')",
+            "INSERT INTO users(name, gender, color, hash) VALUES (
+            '%s', '%s', '%s', '%s')",
             $db->real_escape_string($name),
             $db->real_escape_string($gender),
-            $db->real_escape_string($color));
+            $db->real_escape_string($color),
+            $db->real_escape_string($hash));
             
 
         $db->query($sql);
@@ -83,10 +85,17 @@
         htmlspecialchars($tc, ENT_QUOTES));*/
     }
 }
+readfile('header.tmpl.html');
 ?>
 <form action="" method="post">
-User name: <input type= "text" name="name" value="<?php echo htmlspecialchars($name, ENT_QUOTES);?>"><br>
-<input type= "password" name="password"><br>
+<div class="form-group">
+<label for="name">User name</label>
+<input type= "text" class="form-control" name="name" id =name value="<?php echo htmlspecialchars($name, ENT_QUOTES);?>"><br>
+</div>
+<div class="form-group">
+<label for="password">Password</label>
+<input type= "password" class="form-control" name="password" id="password"><br>
+</div>
 Gender:
 <input type="radio" name="gender" value="f"<?php 
 if ($gender === 'f'){
@@ -151,3 +160,6 @@ if($tc === 'ok'){
 <input type="submit" name="submit" value = "register">
 
 </form>
+<?php
+readfile('footer.tmpl.html');
+?>
