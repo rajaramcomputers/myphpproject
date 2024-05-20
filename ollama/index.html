@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request to Service</title>
+</head>
+<body>
+    <h1>Send Request to Service</h1>
+
+    <textarea id="requestTextArea" rows="4" cols="50" placeholder="Enter your request here"></textarea>
+    <br>
+    <button id="sendRequestButton">Send Request</button>
+    <br>
+    <textarea id="responseTextArea" rows="8" cols="50" placeholder="Response will appear here" readonly></textarea>
+
+    <script>
+        // Define the URL of the service
+        const apiUrl = 'http://127.0.0.1:11434'; // Assuming the service is running on this address
+
+        // Function to send request to the service
+        function sendRequest() {
+            // Get the request data from the text area
+            const requestData = document.getElementById('requestTextArea').value;
+
+            // Make a POST request to the service
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any required headers
+                },
+                body: JSON.stringify({ data: requestData }), // Assuming your service expects JSON data
+            })
+            .then(response => {
+                // Check if the response is successful
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Parse the JSON response
+                return response.json();
+            })
+            .then(data => {
+                // Handle the response data
+                console.log(data);
+                // Display the response in the response text area
+                document.getElementById('responseTextArea').value = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                // Handle errors
+                console.error('There was a problem with your fetch operation:', error);
+                // Display the error message in the response text area
+                document.getElementById('responseTextArea').value = 'Error: ' + error.message;
+            });
+        }
+
+        // Add event listener to the button to send the request when clicked
+        document.getElementById('sendRequestButton').addEventListener('click', sendRequest);
+    </script>
+</body>
+</html>
